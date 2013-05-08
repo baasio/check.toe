@@ -1,12 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">check.toe</string>
+    
+    <string name="title_activity_signup">SignUp</string>
+    <string name="title_activity_signin">SignIn</string>
+    <string name="title_activity_facebook_sample">Facebook</string>
+    
     <string name="menu_settings">Settings</string>
     <string name="menu_helpcenter">Help</string>
+    
     <string name="hello_baasio">Hello baas.io!</string>
     <string name="save_baasio">baas.io 시작하기</string>
     <string name="get_baasio">확인하기</string>
     <string name="success_baasio">축하드립니다.\n\nbaas.io에 첫 엔터티가 생성되었습니다.!!!</string>
 
+    <!-- 공통 -->
+    <string name="label_confirm">확인</string>
+    
+    <!-- Facebook app_id -->
+    <string name="app_id">510355658975579</string>
+    
+    <!-- 로그인/가입 -->
+    <string name="content_description_baasio_logo">baas.io</string>
+    
+    <string name="error_invalid_email">이메일 주소를 확인해주세요.</string>
+    <string name="error_invalid_name">이름을 확인해주세요.</string>
+    <string name="error_invalid_password">비밀번호를 확인해주세요.</string>
+    <string name="error_invalid_grant">이메일 주소 또는 비밀번호를 확인해주세요.</string>
+    <string name="error_already_exist">이미 가입된 사용자입니다.</string>
+    
+    <string name="error_signin_facebook">Facebook 로그인에 실패하였습니다.</string>
+    <string name="error_signup_facebook">Facebook 가입에 실패하였습니다.</string>
+    
+    <string name="msg_signin_success">로그인 되었습니다.</string>
+    <string name="msg_signup_success">가입에 성공하셨습니다.</string>
+    
+    <string name="hint_email">이메일 주소</string>
+    <string name="hint_password">비밀번호</string>
+    <string name="hint_password_verify">비밀번호 확인</string>
+    <string name="hint_name">이름</string>
+    
+    <string name="label_signup_via_facebook">Facebook으로 가입하기</string>
+    <string name="label_signin_via_facebook">Facebook으로 로그인하기</string>
+    <string name="label_need_signup">아이디가 없으신가요?</string>
+    <string name="label_already_signuped">이미 가입하셨나요?</string>
+    
+    <!-- SlidingMenu -->
+    <string name="label_login">Login</string>
+    <string name="label_logout">Logout</string>
 </resources>

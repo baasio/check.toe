@@ -28,7 +28,7 @@ import com.kth.baasio.exception.BaasioRuntimeException;
 import com.kth.baasio.checktoe.BaasioConfig;
 import com.kth.baasio.checktoe.BuildConfig;
 import com.kth.baasio.checktoe.R;
-import com.kth.baasio.checktoe.ui.MainActivity;
+import com.kth.baasio.checktoe.ui.main.MainActivity;
 import com.kth.baasio.utils.JsonUtils;
 import com.kth.baasio.utils.ObjectUtils;
 

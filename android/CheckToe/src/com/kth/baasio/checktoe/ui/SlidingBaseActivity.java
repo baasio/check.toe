@@ -1,49 +1,88 @@
-/*
- * Copyright 2012 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
 package com.kth.baasio.checktoe.ui;
 
+import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.kth.baasio.checktoe.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
-/**
- * A base activity that handles common functionality in the app.
- */
-public abstract class SlidingBaseActivity extends SlidingSherlockFragmentActivity {
+public abstract class SlidingBaseActivity extends SlidingFragmentActivity {
+    protected ImageLoader mImageLoader = ImageLoader.getInstance();
+
+    private Fragment mLeftPaneFragment;
+
+    private Fragment mRightPaneFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EasyTracker.getTracker().setContext(this);
 
-        if (getSupportActionBar() != null)
-            getSupportActionBar().setHomeButtonEnabled(true);
+        getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+
+        // set the Behind View
+        setBehindContentView(R.layout.menu_frame);
+        if (savedInstanceState == null) {
+            FragmentTransaction t = this.getSupportFragmentManager().beginTransaction();
+            mLeftPaneFragment = onCreateLeftPaneFragment();
+            t.replace(R.id.menu_frame, mLeftPaneFragment);
+            t.commit();
+        } else {
+            mLeftPaneFragment = (Fragment)this.getSupportFragmentManager().findFragmentById(
+                    R.id.menu_frame);
+        }
+
+        // set the Right Behind View
+        if (savedInstanceState == null) {
+            mRightPaneFragment = onCreateRightPaneFragment();
+            if (mRightPaneFragment != null) {
+                getSlidingMenu().setMode(SlidingMenu.LEFT_RIGHT);
+                getSlidingMenu().setSecondaryMenu(R.layout.menu_frame_two);
+                getSlidingMenu().setSecondaryShadowDrawable(R.drawable.shadowright);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.menu_frame_two, mRightPaneFragment).commit();
+            } else {
+                getSlidingMenu().setMode(SlidingMenu.LEFT);
+            }
+        } else {
+            Fragment fragment = (Fragment)this.getSupportFragmentManager().findFragmentById(
+                    R.id.menu_frame_two);
+            if (fragment != null) {
+                mRightPaneFragment = fragment;
+            } else {
+                getSlidingMenu().setMode(SlidingMenu.LEFT);
+            }
+        }
+
+        // customize the SlidingMenu
+        SlidingMenu sm = getSlidingMenu();
+        sm.setShadowWidthRes(R.dimen.shadow_width);
+        sm.setShadowDrawable(R.drawable.shadow);
+        sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+        sm.setFadeDegree(0.35f);
+        sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    protected abstract Fragment onCreateLeftPaneFragment();
+
+    protected abstract Fragment onCreateRightPaneFragment();
+
+    public Fragment getLeftPaneFragment() {
+        return mLeftPaneFragment;
+    }
+
+    public Fragment getRightPaneFragment() {
+        return mRightPaneFragment;
     }
 
     @Override
@@ -56,36 +95,10 @@ public abstract class SlidingBaseActivity extends SlidingSherlockFragmentActivit
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Sets the icon color using some fancy blending mode trickery.
-     */
-    protected void setActionBarColor(int color) {
-        if (color == 0) {
-            color = 0xffffffff;
-        }
-
-        final Resources res = getResources();
-        Drawable maskDrawable = res.getDrawable(R.drawable.actionbar_icon_mask);
-        if (!(maskDrawable instanceof BitmapDrawable)) {
-            return;
-        }
-
-        Bitmap maskBitmap = ((BitmapDrawable)maskDrawable).getBitmap();
-        final int width = maskBitmap.getWidth();
-        final int height = maskBitmap.getHeight();
-
-        Bitmap outBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(outBitmap);
-        canvas.drawBitmap(maskBitmap, 0, 0, null);
-
-        Paint maskedPaint = new Paint();
-        maskedPaint.setColor(color);
-        maskedPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_ATOP));
-
-        canvas.drawRect(0, 0, width, height, maskedPaint);
-
-        BitmapDrawable outDrawable = new BitmapDrawable(res, outBitmap);
-        getSupportActionBar().setIcon(outDrawable);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getSupportMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
     }
 
     /**

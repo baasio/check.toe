@@ -20,6 +20,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.kth.baasio.checktoe.R;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -38,6 +39,7 @@ import android.support.v4.app.NavUtils;
  * A base activity that handles common functionality in the app.
  */
 public abstract class BaseActivity extends SherlockFragmentActivity {
+    protected ImageLoader mImageLoader = ImageLoader.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
