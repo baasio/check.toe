@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">check.toe</string>
     
-    <string name="title_activity_signup">SignUp</string>
-    <string name="title_activity_signin">SignIn</string>
+    <string name="title_activity_signup">가입</string>
+    <string name="title_activity_signin">로그인</string>
     <string name="title_activity_facebook_sample">Facebook</string>
+    <string name="title_activity_my_checklist">내 체크리스트</string>
+    <string name="title_activity_recomment_checklist">추천 체크리스트</string>
+    <string name="title_activity_favorite_checklist">즐겨찾기</string>
+    <string name="title_activity_checkitem">체크리스트</string>
+    <string name="title_activity_new_checklist">체크리스트 추가</string>
+    <string name="title_activity_edit_checklist">체크리스트 수정</string>
     
     <string name="menu_settings">Settings</string>
     <string name="menu_helpcenter">Help</string>
@@ -16,6 +22,71 @@
 
     <!-- 공통 -->
     <string name="label_confirm">확인</string>
+    
+    <string name="created_time"><xliff:g id="time">%s</xliff:g>에 작성</string>
+    <string name="modified_time"><xliff:g id="time">%s</xliff:g>에 수정</string>
+    
+    <string name="progress_dialog_loading">잠시만 기다려주세요.</string>
+    <string name="progress_dialog_saving">저장중입니다.\n잠시만 기다려주세요.</string>
+    <string name="progress_dialog_removing">삭제중입니다.\n잠시만 기다려주세요.</string>
+    
+    <!-- Checklist -->
+    <string name="empty_checklist">체크리스트가 없습니다.</string>
+    <string name="menu_new_checklist">새로운 체크리스트</string>
+    <string name="menu_edit_checklist">체크리스트 수정</string>
+    <string name="menu_remove_checklist">체크리스트 삭제</string>
+    
+    <string name="menu_finish">완료</string>
+    <string name="menu_cancel">취소</string>
+    
+    <string name="success_add_checklist">체크리스트가 저장되었습니다.</string>
+    <string name="fail_add_checklist">체크리스트가 저장에 실패하였습니다. 이유:<xliff:g id="error">%s</xliff:g></string>
+    
+    <string name="success_remove_checklist">체크리스트가 삭제되었습니다.</string>
+    <string name="fail_remove_checklist">체크리스트 삭제에 실패하였습니다. 이유:<xliff:g id="error">%s</xliff:g></string>
+    
+    <string name="error_unknown">알수없음</string>
+    
+    <string name="error_no_title">제목을 입력해주세요.</string>
+    <string name="error_no_description">설명을 입력해주세요.</string>
+    <string name="error_no_tag">태그를 입력해주세요.</string>
+    
+    <!-- Checkitem -->
+    <string name="empty_checkitem">체크아이템이 없습니다.</string>
+    
+    <string name="menu_add_favorite">즐겨찾기 추가</string>
+    <string name="menu_remove_favorite">즐겨찾기 삭제</string>
+    
+    <string name="menu_clone_checklist">체크리스트 복사해오기</string>
+    
+    <string name="menu_add_checkitem">체크아이템 추가</string>
+    <string name="menu_edit_checkitem">체크아이템 수정</string>
+    <string name="menu_remove_checkitem">체크아이템 삭제</string>
+    
+    <string name="success_clone_checklist">체크리스트를 가져왔습니다.</string>
+    <string name="fail_clone_checklist">체크리스트를 가져오는데 실패하였습니다. 이유:<xliff:g id="error">%s</xliff:g></string>
+    
+    <!-- Search -->
+    <string name="search_label">체크리스트 검색</string>
+    <string name="search_hint">검색할 단어</string>
+    <string name="search_description">체크리스트를 검색합니다.</string>
+    <string name="search_title">\'<xliff:g id="query">%s</xliff:g>\'의검색 결과</string>
+    
+    <!-- 시간 -->
+    <string name="time_now">지금</string>
+    <string name="time_sec">초 전</string>
+    <string name="time_min">분 전</string>
+    <string name="time_one_min">1분 전</string>
+    <string name="time_one_hour">1시간 전</string>
+    <string name="time_hour">시간 전</string>
+    <string name="time_one_day">어제</string>
+    <string name="time_day">일 전</string>
+    <string name="time_one_weeks">1주 전</string>
+    <string name="time_week">주 전</string>
+    <string name="time_one_month">1개월 전</string>
+    <string name="time_month">개월 전</string>
+    <string name="time_one_year">1년 전</string>
+    <string name="time_year">년 전</string>
     
     <!-- Facebook app_id -->
     <string name="app_id">510355658975579</string>
@@ -46,6 +117,8 @@
     <string name="label_already_signuped">이미 가입하셨나요?</string>
     
     <!-- SlidingMenu -->
-    <string name="label_login">Login</string>
-    <string name="label_logout">Logout</string>
+    <string name="label_login">로그인</string>
+    <string name="label_logout">로그아웃</string>
+    
+    <string name="msg_signout_success">로그아웃되었습니다.</string>
 </resources>

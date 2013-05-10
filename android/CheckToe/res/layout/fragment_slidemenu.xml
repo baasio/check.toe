@@ -25,7 +25,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/label_login" >
+            android:text="@string/label_login"
+            android:textSize="@dimen/text_xlarge"
+            android:textStyle="bold" >
         </TextView>
     </LinearLayout>
 
@@ -34,12 +36,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone" >
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
             android:background="#000000" />
 
         <TextView
@@ -47,40 +50,51 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@android:drawable/list_selector_background"
+            android:drawableLeft="@drawable/ic_logout"
+            android:drawablePadding="3dp"
             android:gravity="center_vertical"
-            android:text="@string/label_logout" />
+            android:text="@string/label_logout"
+            android:textSize="@dimen/text_large" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:background="#000000" />
 
     <TextView
         android:id="@+id/tvMyChecklist"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:background="@android:drawable/list_selector_background"
+        android:drawableLeft="@drawable/ic_my_checklist"
+        android:drawablePadding="3dp"
         android:gravity="center_vertical"
-        android:text="My checklist" />
+        android:text="@string/title_activity_my_checklist"
+        android:textSize="@dimen/text_large" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tvRecommendChecklist"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:background="@android:drawable/list_selector_background"
+        android:drawableLeft="@drawable/ic_recommend_checklist"
+        android:drawablePadding="3dp"
         android:gravity="center_vertical"
-        android:text="Recommend checklist" />
+        android:text="@string/title_activity_recomment_checklist"
+        android:textSize="@dimen/text_large" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tvFavoriteChecklist"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:background="@android:drawable/list_selector_background"
+        android:drawableLeft="@drawable/ic_favorite_checklist"
+        android:drawablePadding="3dp"
         android:gravity="center_vertical"
-        android:text="Favorite" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:gravity="center_vertical"
-        android:text="Search checklist" />
+        android:text="@string/title_activity_favorite_checklist"
+        android:textSize="@dimen/text_large" />
 
 </LinearLayout>

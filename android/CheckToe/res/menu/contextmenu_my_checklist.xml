@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_edit_checklist"
+        android:icon="@drawable/ic_action_edit_checklist"
+        android:title="@string/menu_edit_checklist"
+        android:orderInCategory="1"
+        android:showAsAction="always" />
+    <item android:id="@+id/menu_remove_checklist"
+        android:icon="@drawable/ic_action_remove_checklist"
+        android:title="@string/menu_remove_checklist"
+        android:orderInCategory="1"
+        android:showAsAction="always" />
+</menu>

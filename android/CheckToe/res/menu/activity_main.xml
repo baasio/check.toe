@@ -11,4 +11,16 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/menu_helpcenter"/>
+    
+    <item
+        android:id="@+id/menu_changepassword"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="Change Password"/>
+    
+    <item
+        android:id="@+id/menu_resetpassword"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="Reset Password"/>
 </menu>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PullToRefresh">
+        <attr format="reference|color" name="ptrAdapterViewBackground" />
+        <attr format="reference|color" name="ptrHeaderBackground" />
+        <attr format="color" name="ptrHeaderTextColor" />
+        <attr name="ptrMode">
+            <flag name="pullDownFromTop" value="0x1" />
+            <flag name="pullUpFromBottom" value="0x2" />
+            <flag name="both" value="0x3" />
+        </attr>
+    </declare-styleable>
+    
+    <declare-styleable name="TopMenuView">
+        <attr format="reference" name="leftMenuImageResource" />
+        <attr format="reference" name="rightMenuImageResource" />
+        <attr format="reference" name="centerMenuImageResource" />
+        <attr format="reference" name="centerMenuTextResource" />
+        <attr format="reference" name="rightMenuTextResource" />
+        <attr format="reference" name="leftMenuTextResource" />
+        <attr format="reference" name="topMenuLayoutResource" />
+        <attr format="integer" name="type" />
+    </declare-styleable>
+    
+	<declare-styleable name="SemiClosedSlidingDrawer">
+	    <attr name="handle" format="integer"/>
+	    <attr name="content" format="integer"/>
+	    <attr name="orientation" format="string" />
+	    <attr name="bottomOffset" format="dimension"  />
+	    <attr name="topOffset" format="dimension"  />
+	    <attr name="allowSingleTap" format="boolean" />
+	    <attr name="animateOnClick" format="boolean" />
+	    <attr name="semiClosedContentSize" format="dimension" />
+	</declare-styleable>
+	
+	<!-- 
+		Vertical SeekBar. added by yeojoy
+		source : http://ememomo.tistory.com/58
+	-->
+    <declare-styleable name="ProgressBar">
+        <attr name="android:progressDrawable" />
+        <attr name="android:minWidth" />
+        <attr name="android:maxWidth" />
+        <attr name="android:minHeight" />
+        <attr name="android:maxHeight" />
+        <attr name="android:max" />
+        <attr name="android:progress" />
+        <attr name="android:secondaryProgress" />
+    </declare-styleable>
+
+    <declare-styleable name="SeekBar">
+        <attr name="android:thumb" />
+        <attr name="android:thumbOffset" />
+    </declare-styleable>
+    <declare-styleable name="Theme">
+        <attr name="android:disabledAlpha" />
+    </declare-styleable>
+     <declare-styleable name="ViewFlow">
+        <attr name="sidebuffer" format="integer" />
+    </declare-styleable>
+    <declare-styleable name="CircleFlowIndicator">
+        <attr name="activeColor" format="color" />
+        <attr name="inactiveColor" format="color" />
+        <attr name="radius" format="dimension" />
+		<attr name="centered" format="boolean" />
+		<attr name="fadeOut" format="integer" />
+		<attr name="inactiveType">
+			<flag name="stroke" value="0" />
+			<flag name="fill" value="1" />
+		</attr>
+		<attr name="activeType">
+			<flag name="stroke" value="0" />
+			<flag name="fill" value="1" />
+		</attr>
+    </declare-styleable>    
+    
+    <!-- Attributes for RoundedImageView -->
+    <declare-styleable name="RoundedImageView">
+        <!-- Size to round image corners by. Default is zero, unrounded.
+        <b>NOTE:</b> This only works for bitmap image sources. -->
+        <attr name="cornerRadius" format="dimension" />
+        <attr name="cornerColor" format="color" />
+        <attr name="cornerBackground" format="reference" />
+    </declare-styleable>
+</resources>
+

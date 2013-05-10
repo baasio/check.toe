@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_add_favorite"
+        android:icon="@drawable/ic_action_add_favorite"
+        android:title="@string/menu_add_favorite"
+        android:orderInCategory="1"
+        android:showAsAction="always" />
+    <item android:id="@+id/menu_remove_favorite"
+        android:icon="@drawable/ic_action_remove_favorite"
+        android:title="@string/menu_remove_favorite"
+        android:orderInCategory="1"
+        android:showAsAction="always" />
+    <item android:id="@+id/menu_clone_checklist"
+        android:icon="@drawable/ic_action_clone_checklist"
+        android:title="@string/menu_clone_checklist"
+        android:orderInCategory="1"
+        android:showAsAction="always" />
+    <item android:id="@+id/menu_add_checkitem"
+        android:icon="@drawable/ic_action_add_checkitem"
+        android:title="@string/menu_add_checkitem"
+        android:orderInCategory="1"
+        android:showAsAction="always" />
+</menu>
