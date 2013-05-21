@@ -81,6 +81,8 @@ public class CheckitemFragment extends BaseFragment implements OnRefreshListener
 
     public static final String ENTITY_PROPERTY_NAME_OWNER_PICTURE = "owner_picture";
 
+    public static final String ENTITY_PROPERTY_NAME_OWNER_IS_FACEBOOK = "owner_isfacebook";
+
     public static final String ENTITY_PROPERTY_NAME_ASSIGNOR_UUID = "assignor_uuid";
 
     public static final String ENTITY_PROPERTY_NAME_ASSIGNOR_NAME = "assignor_name";
@@ -98,6 +100,8 @@ public class CheckitemFragment extends BaseFragment implements OnRefreshListener
     private ViewGroup mRootView;
 
     private ImageView mivProfile;
+
+    private ImageView mivFacebook;
 
     private TextView mtvTitle;
 
@@ -170,15 +174,40 @@ public class CheckitemFragment extends BaseFragment implements OnRefreshListener
         mRootView = (ViewGroup)inflater.inflate(R.layout.fragment_checkitem, null);
 
         mivProfile = (ImageView)mRootView.findViewById(R.id.ivProfile);
-        mtvTitle = (TextView)mRootView.findViewById(R.id.tvTitle);
-        mtvName = (TextView)mRootView.findViewById(R.id.tvName);
-        mtvDescription = (TextView)mRootView.findViewById(R.id.tvDescription);
+        mivProfile.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String ownerUuid = EtcUtils.getStringFromEntity(mChecklist,
+                        ENTITY_PROPERTY_NAME_OWNER_UUID);
+
+                if (!ObjectUtils.isEmpty(ownerUuid)) {
+                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                    intent.putExtra(ProfileFragment.INTENT_USER_UUID, ownerUuid);
+                    startActivity(intent);
+                }
+            }
+        });
 
         String imageUrl = EtcUtils.getStringFromEntity(mChecklist,
                 ChecklistFragment.ENTITY_PROPERTY_NAME_OWNER_PICTURE);
         if (!ObjectUtils.isEmpty(imageUrl)) {
             mImageLoader.displayImage(imageUrl, mivProfile, options);
         }
+
+        mivFacebook = (ImageView)mRootView.findViewById(R.id.ivFacebook);
+
+        boolean isFacebook = EtcUtils.getBooleanFromEntity(mChecklist,
+                ChecklistFragment.ENTITY_PROPERTY_NAME_OWNER_IS_FACEBOOK, false);
+        if (isFacebook) {
+            mivFacebook.setVisibility(View.VISIBLE);
+        } else {
+            mivFacebook.setVisibility(View.GONE);
+        }
+
+        mtvTitle = (TextView)mRootView.findViewById(R.id.tvTitle);
+        mtvName = (TextView)mRootView.findViewById(R.id.tvName);
+        mtvDescription = (TextView)mRootView.findViewById(R.id.tvDescription);
 
         String title = EtcUtils.getStringFromEntity(mChecklist,
                 ChecklistFragment.ENTITY_PROPERTY_NAME_TITLE);
@@ -236,11 +265,9 @@ public class CheckitemFragment extends BaseFragment implements OnRefreshListener
             com.actionbarsherlock.view.MenuInflater inflater) {
 
         BaasioUser user = Baas.io().getSignedInUser();
-        if (ObjectUtils.isEmpty(user)) {
-            return;
+        if (!ObjectUtils.isEmpty(user)) {
+            inflater.inflate(R.menu.fragment_checkitem, menu);
         }
-
-        inflater.inflate(R.menu.fragment_checkitem, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -310,6 +337,12 @@ public class CheckitemFragment extends BaseFragment implements OnRefreshListener
         entity.setProperty(ChecklistFragment.ENTITY_PROPERTY_NAME_OWNER_NAME, user.getName());
 
         entity.setProperty(ChecklistFragment.ENTITY_PROPERTY_NAME_OWNER_PICTURE, user.getPicture());
+
+        if (!ObjectUtils.isEmpty(user.getFacebook())) {
+            entity.setProperty(ChecklistFragment.ENTITY_PROPERTY_NAME_OWNER_IS_FACEBOOK, true);
+        } else {
+            entity.setProperty(ChecklistFragment.ENTITY_PROPERTY_NAME_OWNER_IS_FACEBOOK, false);
+        }
 
         DialogUtils.showProgressDialog(this, "cloning", getString(R.string.progress_dialog_saving));
 
@@ -691,6 +724,8 @@ public class CheckitemFragment extends BaseFragment implements OnRefreshListener
 
         public ImageView mivProfile;
 
+        public ImageView mivFacebook;
+
         public TextView mtvTitle;
 
         public TextView mtvDescription;
@@ -744,6 +779,7 @@ public class CheckitemFragment extends BaseFragment implements OnRefreshListener
 
                 view.mllRoot = (ViewGroup)convertView.findViewById(R.id.llRoot);
                 view.mivProfile = (ImageView)convertView.findViewById(R.id.ivProfile);
+                view.mivFacebook = (ImageView)convertView.findViewById(R.id.ivFacebook);
                 view.mtvTitle = (TextView)convertView.findViewById(R.id.tvTitle);
                 view.mtvDescription = (TextView)convertView.findViewById(R.id.tvDescription);
                 view.mtvCreatedTime = (TextView)convertView.findViewById(R.id.tvCreatedTime);
@@ -768,6 +804,14 @@ public class CheckitemFragment extends BaseFragment implements OnRefreshListener
                     mImageLoader.displayImage(imageUrl, view.mivProfile, options);
                 } else {
                     view.mivProfile.setImageResource(R.drawable.person_image_empty);
+                }
+
+                boolean isFacebook = EtcUtils.getBooleanFromEntity(entity,
+                        ENTITY_PROPERTY_NAME_OWNER_IS_FACEBOOK, false);
+                if (isFacebook) {
+                    view.mivFacebook.setVisibility(View.VISIBLE);
+                } else {
+                    view.mivFacebook.setVisibility(View.GONE);
                 }
 
                 if (entity.getCreated() != null) {

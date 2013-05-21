@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/etSearchFriends"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/friend_search_black"
+        android:hint="@string/search_hint"
+        android:imeOptions="actionSearch"
+        android:lines="1"
+        android:maxLength="20"
+        android:paddingLeft="40dp"
+        android:includeFontPadding="false"
+        android:singleLine="true"
+        android:textSize="@dimen/text_medium" 
+       	android:visibility="visible"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white" >
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <io.baas.checktoe.ui.view.pulltorefresh.PullToRefreshListView
+            android:id="@+id/lvPullToRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent" />
+    </FrameLayout>
+
+</LinearLayout>

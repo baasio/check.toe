@@ -14,7 +14,6 @@
 
 package io.baas.checktoe.ui.main;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

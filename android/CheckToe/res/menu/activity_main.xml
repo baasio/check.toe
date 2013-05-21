@@ -23,4 +23,10 @@
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="Reset Password"/>
+    
+    <item
+        android:id="@+id/menu_signin_with_revoke"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="SignIn with revoke"/>
 </menu>

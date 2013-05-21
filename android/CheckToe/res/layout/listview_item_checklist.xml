@@ -10,13 +10,26 @@
     android:paddingTop="12dp"
     android:background="@android:drawable/list_selector_background" >
 
-    <ImageView
-        android:id="@+id/ivProfile"
+    <FrameLayout
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginRight="5dp"
-        android:src="@drawable/person_image_empty" />
+        android:layout_marginRight="5dp" >
+
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/person_image_empty" />
+
+        <ImageView
+            android:id="@+id/ivFacebook"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_gravity="right|bottom"
+            android:src="@drawable/facebook_icon"
+            android:visibility="gone" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="0dp"

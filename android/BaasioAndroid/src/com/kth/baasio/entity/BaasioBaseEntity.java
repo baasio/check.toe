@@ -7,7 +7,6 @@ import com.kth.baasio.Baas;
 import com.kth.baasio.callback.BaasioAsyncTask;
 import com.kth.baasio.callback.BaasioCallback;
 import com.kth.baasio.entity.group.BaasioGroup;
-import com.kth.baasio.entity.push.BaasioMessage;
 import com.kth.baasio.entity.user.BaasioUser;
 import com.kth.baasio.exception.BaasioError;
 import com.kth.baasio.exception.BaasioException;
@@ -15,7 +14,6 @@ import com.kth.baasio.response.BaasioResponse;
 import com.kth.baasio.utils.JsonUtils;
 import com.kth.baasio.utils.MapUtils;
 import com.kth.baasio.utils.ObjectUtils;
-import com.kth.common.utils.LogUtils;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.annotate.JsonAnyGetter;
@@ -302,10 +300,7 @@ public class BaasioBaseEntity {
 
                 if (newEntity.getType() != null) {
                     if (newEntity.getType().equals(entity.getType())) {
-//                        newEntity.properties = (HashMap<String, JsonNode>) entity.properties.clone();
-                    	newEntity.properties = entity.properties;
-                    	if(newEntity.getType().equals(BaasioMessage.ENTITY_TYPE));
-                    		LogUtils.LOGE("test", "check");
+                        newEntity.properties = entity.properties;
                     } else {
                         throw new Exception(BaasioError.ERROR_ENTITY_TYPE_MISMATCHED);
                     }

@@ -25,12 +25,6 @@ import com.google.android.gcm.GCMBaseIntentService;
 import com.kth.baasio.entity.push.BaasioPush;
 import com.kth.baasio.exception.BaasioException;
 import com.kth.baasio.exception.BaasioRuntimeException;
-
-import io.baas.checktoe.BaasioConfig;
-import io.baas.checktoe.BuildConfig;
-import io.baas.checktoe.R;
-import io.baas.checktoe.ui.main.MainActivity;
-
 import com.kth.baasio.utils.JsonUtils;
 import com.kth.baasio.utils.ObjectUtils;
 
@@ -40,6 +34,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+
+import io.baas.checktoe.BaasioConfig;
+import io.baas.checktoe.BuildConfig;
+import io.baas.checktoe.R;
+import io.baas.checktoe.ui.main.MainActivity;
 
 import java.util.Random;
 
@@ -133,7 +132,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
         }
 
-        int icon = R.drawable.ic_launcher;
+        int icon = R.drawable.ic_stat_checktoe;
         long when = System.currentTimeMillis();
         NotificationManager notificationManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);

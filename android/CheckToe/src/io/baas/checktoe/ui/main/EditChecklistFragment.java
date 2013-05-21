@@ -6,11 +6,6 @@ import static com.kth.common.utils.LogUtils.makeLogTag;
 import com.actionbarsherlock.view.MenuItem;
 import com.kth.baasio.Baas;
 import com.kth.baasio.callback.BaasioCallback;
-import io.baas.checktoe.R;
-import io.baas.checktoe.ui.BaseFragment;
-import io.baas.checktoe.ui.dialog.DialogUtils;
-import io.baas.checktoe.utils.EtcUtils;
-
 import com.kth.baasio.entity.entity.BaasioEntity;
 import com.kth.baasio.entity.user.BaasioUser;
 import com.kth.baasio.exception.BaasioException;
@@ -27,6 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import io.baas.checktoe.R;
+import io.baas.checktoe.ui.BaseFragment;
+import io.baas.checktoe.ui.dialog.DialogUtils;
+import io.baas.checktoe.utils.EtcUtils;
 
 public class EditChecklistFragment extends BaseFragment {
     private static final String TAG = makeLogTag(EditChecklistFragment.class);
@@ -137,6 +137,14 @@ public class EditChecklistFragment extends BaseFragment {
                         user.getName());
                 entity.setProperty(ChecklistFragment.ENTITY_PROPERTY_NAME_OWNER_PICTURE,
                         user.getPicture());
+                if (!ObjectUtils.isEmpty(user.getFacebook())) {
+                    entity.setProperty(ChecklistFragment.ENTITY_PROPERTY_NAME_OWNER_IS_FACEBOOK,
+                            true);
+                } else {
+                    entity.setProperty(ChecklistFragment.ENTITY_PROPERTY_NAME_OWNER_IS_FACEBOOK,
+                            false);
+                }
+
                 entity.setProperty(ChecklistFragment.ENTITY_PROPERTY_NAME_TITLE, title.trim());
                 entity.setProperty(ChecklistFragment.ENTITY_PROPERTY_NAME_DESCRIPTION,
                         description.trim());

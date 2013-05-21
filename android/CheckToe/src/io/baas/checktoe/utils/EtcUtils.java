@@ -16,7 +16,7 @@
 
 package io.baas.checktoe.utils;
 
-import io.baas.checktoe.R;
+import com.kth.baasio.entity.BaasioBaseEntity;
 import com.kth.baasio.entity.entity.BaasioEntity;
 
 import org.codehaus.jackson.JsonNode;
@@ -26,6 +26,8 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.view.View;
+
+import io.baas.checktoe.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -80,15 +82,9 @@ public class EtcUtils {
         return hasHoneycomb() && isTablet(context);
     }
 
-    public static String getStringFromEntity(BaasioEntity entity, String key) {
+    public static String getStringFromEntity(BaasioBaseEntity entity, String key) {
         JsonNode node = entity.getProperties().get(key);
         if (node != null) {
-            // String result = node.toString();
-            // if(result != null && result.length() > 0) {
-            // result = result.replace("<BR>", "\n");
-            // result = result.replace("<br>", "\n");
-            // return result.replace("\"", "").trim();
-            // }
             String value = node.getTextValue();
             if (value != null && value.length() > 0) {
                 return value.replace("<br>", "\n").replace("<BR>", "\n").trim();
@@ -117,12 +113,16 @@ public class EtcUtils {
     public static int getIntFromEntity(BaasioEntity entity, String key, int value) {
         JsonNode node = entity.getProperties().get(key);
         if (node != null) {
-            // String result = node.toString();
-            // if(result != null && result.length() > 0) {
-            // return Integer.valueOf(result.replace("\"", "").trim());
-            // }
-
             return node.getIntValue();
+        }
+
+        return value;
+    }
+
+    public static boolean getBooleanFromEntity(BaasioEntity entity, String key, boolean value) {
+        JsonNode node = entity.getProperties().get(key);
+        if (node != null) {
+            return node.getBooleanValue();
         }
 
         return value;

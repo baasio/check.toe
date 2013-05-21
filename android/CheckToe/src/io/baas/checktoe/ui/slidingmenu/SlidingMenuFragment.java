@@ -21,8 +21,9 @@ import android.widget.Toast;
 import io.baas.checktoe.R;
 import io.baas.checktoe.ui.BaseFragment;
 import io.baas.checktoe.ui.auth.SignInActivity;
-import io.baas.checktoe.ui.main.ChecklistFragment;
 import io.baas.checktoe.ui.main.MainActivity;
+import io.baas.checktoe.ui.main.ProfileActivity;
+import io.baas.checktoe.ui.main.ProfileFragment;
 
 public class SlidingMenuFragment extends BaseFragment {
 
@@ -33,6 +34,8 @@ public class SlidingMenuFragment extends BaseFragment {
     private LinearLayout mllProfile;
 
     private ImageView mivProfile;
+
+    private ImageView mivFacebook;
 
     private TextView mtvName;
 
@@ -45,6 +48,8 @@ public class SlidingMenuFragment extends BaseFragment {
     private TextView mtvRecommendChecklist;
 
     private TextView mtvFavoriteChecklist;
+
+    private TextView tvFriend;
 
     private DisplayImageOptions options;
 
@@ -70,17 +75,22 @@ public class SlidingMenuFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 if (!ObjectUtils.isEmpty(Baas.io().getSignedInUser())) {
-
+                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                    intent.putExtra(ProfileFragment.INTENT_USER, Baas.io().getSignedInUser()
+                            .toString());
+                    startActivity(intent);
                 } else {
-                    Intent intent2 = new Intent(getActivity(), SignInActivity.class);
-                    intent2.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-                    startActivityForResult(intent2, REQUEST_SIGNIN);
+                    Intent intent = new Intent(getActivity(), SignInActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+                    startActivityForResult(intent, REQUEST_SIGNIN);
                 }
 
             }
         });
 
         mivProfile = (ImageView)mRootView.findViewById(R.id.ivProfile);
+        mivFacebook = (ImageView)mRootView.findViewById(R.id.ivFacebook);
+
         mtvName = (TextView)mRootView.findViewById(R.id.tvName);
 
         mllLogout = (LinearLayout)mRootView.findViewById(R.id.llLogout);
@@ -96,7 +106,7 @@ public class SlidingMenuFragment extends BaseFragment {
 
                 refreshViews();
 
-                switchFragment(ChecklistFragment.MODE_RECOMMEND_CHECKLIST);
+                switchFragment(MainActivity.MODE_RECOMMEND_CHECKLIST);
             }
         });
 
@@ -105,7 +115,7 @@ public class SlidingMenuFragment extends BaseFragment {
 
             @Override
             public void onClick(View v) {
-                switchFragment(ChecklistFragment.MODE_MY_CHECKLIST);
+                switchFragment(MainActivity.MODE_MY_CHECKLIST);
             }
         });
 
@@ -114,7 +124,7 @@ public class SlidingMenuFragment extends BaseFragment {
 
             @Override
             public void onClick(View v) {
-                switchFragment(ChecklistFragment.MODE_RECOMMEND_CHECKLIST);
+                switchFragment(MainActivity.MODE_RECOMMEND_CHECKLIST);
             }
         });
 
@@ -123,7 +133,16 @@ public class SlidingMenuFragment extends BaseFragment {
 
             @Override
             public void onClick(View v) {
-                switchFragment(ChecklistFragment.MODE_FAVORITE_CHECKLIST);
+                switchFragment(MainActivity.MODE_FAVORITE_CHECKLIST);
+            }
+        });
+
+        tvFriend = (TextView)mRootView.findViewById(R.id.tvFriend);
+        tvFriend.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                switchFragment(MainActivity.MODE_FRIEND);
             }
         });
 
@@ -131,15 +150,24 @@ public class SlidingMenuFragment extends BaseFragment {
     }
 
     public void refreshViews() {
-        if (!ObjectUtils.isEmpty(Baas.io().getSignedInUser())) {
-            String imageUrl = Baas.io().getSignedInUser().getPicture();
+        BaasioUser user = Baas.io().getSignedInUser();
+        if (!ObjectUtils.isEmpty(user)) {
+            String imageUrl = user.getPicture();
 
             if (imageUrl != null)
                 mImageLoader.displayImage(imageUrl, mivProfile, options);
+            else
+                mivProfile.setImageResource(R.drawable.person_image_empty);
+
+            if (!ObjectUtils.isEmpty(user.getFacebook())) {
+                mivFacebook.setVisibility(View.VISIBLE);
+            } else {
+                mivFacebook.setVisibility(View.GONE);
+            }
 
             mllLogout.setVisibility(View.VISIBLE);
 
-            String name = Baas.io().getSignedInUser().getName();
+            String name = user.getName();
 
             mtvName.setText(name);
 
@@ -161,7 +189,7 @@ public class SlidingMenuFragment extends BaseFragment {
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_SIGNIN) {
-                switchFragment(ChecklistFragment.MODE_MY_CHECKLIST);
+                switchFragment(MainActivity.MODE_MY_CHECKLIST);
 
                 Toast.makeText(getActivity(), getString(R.string.msg_signin_success),
                         Toast.LENGTH_LONG).show();

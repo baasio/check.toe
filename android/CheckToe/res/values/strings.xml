@@ -8,6 +8,8 @@
     <string name="title_activity_my_checklist">내 체크리스트</string>
     <string name="title_activity_recomment_checklist">추천 체크리스트</string>
     <string name="title_activity_favorite_checklist">즐겨찾기</string>
+    <string name="title_activity_friend">친구관리</string>
+    <string name="title_activity_profile">프로필</string>
     <string name="title_activity_checkitem">체크리스트</string>
     <string name="title_activity_new_checklist">체크리스트 추가</string>
     <string name="title_activity_edit_checklist">체크리스트 수정</string>
@@ -20,6 +22,8 @@
     <string name="get_baasio">확인하기</string>
     <string name="success_baasio">축하드립니다.\n\nbaas.io에 첫 엔터티가 생성되었습니다.!!!</string>
 
+    <string name="label_back_to_finish">종료하시려면 한번 더 눌러주세요.</string>
+    
     <!-- 공통 -->
     <string name="label_confirm">확인</string>
     
@@ -71,6 +75,38 @@
     <string name="search_hint">검색할 단어</string>
     <string name="search_description">체크리스트를 검색합니다.</string>
     <string name="search_title">\'<xliff:g id="query">%s</xliff:g>\'의검색 결과</string>
+    
+    <!-- 친구리스트 -->
+    <string name="tab_following">팔로잉</string>
+    <string name="tab_follower">팔로워</string>
+    <string name="empty_user">검색된 유저가 없습니다.</string>
+    <string name="empty_follower">follow하는 친구가 없습니다.</string>
+    <string name="empty_following">follow하고 있는 친구가 없습니다.</string>
+    
+    <!-- 프로파일 -->
+    <string name="label_follow">FOLLOW</string>
+    <string name="label_unfollow">UNFOLLOW</string>
+    <string name="label_created_user"><xliff:g id="date">%s</xliff:g>에 가입</string>
+    <string name="label_modified_user"><xliff:g id="date">%s</xliff:g>에 수정</string>
+    
+    <string name="label_profile_empty_comment">댓글이 없습니다.</string>
+    <string name="hint_profile_comment">댓글을 남기세요.</string>
+    <string name="label_profile_write_comment">쓰기</string>
+    
+    <string name="label_profile_created_comment"><xliff:g id="date">%s</xliff:g> 작성</string>
+    
+    <string name="error_get_profile">프로필 정보를 받아오는데에 실패하였습니다.</string>
+    <string name="error_comment_no_content">댓글을 입력해주세요.</string>
+    <string name="error_comment_need_login">로그인을 해주세요.</string>
+    
+    <string name="success_write_comment">댓글을 성공하였습니다.</string>
+    <string name="fail_write_comment">댓글을 실패하였습니다. 이유:<xliff:g id="error">%s</xliff:g></string>
+    
+    <string name="success_following">팔로우하였습니다.</string>
+    <string name="fail_following">팔로우를 실패하였습니다. 이유:<xliff:g id="error">%s</xliff:g></string>
+    
+    <string name="success_unfollowing">언팔로우하였습니다.</string>
+    <string name="fail_unfollowing">언팔로우를 실패하였습니다. 이유:<xliff:g id="error">%s</xliff:g></string>
     
     <!-- 시간 -->
     <string name="time_now">지금</string>

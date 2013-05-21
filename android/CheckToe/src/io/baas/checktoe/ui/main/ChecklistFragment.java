@@ -36,7 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import io.baas.checktoe.R;
-import io.baas.checktoe.ui.BaseFragment;
+import io.baas.checktoe.ui.SearchableBaseFragment;
 import io.baas.checktoe.ui.dialog.DialogUtils;
 import io.baas.checktoe.ui.view.pulltorefresh.PullToRefreshBase.OnRefreshListener;
 import io.baas.checktoe.ui.view.pulltorefresh.PullToRefreshListView;
@@ -47,7 +47,8 @@ import io.baas.checktoe.utils.actionmodecompat.ActionMode.Callback;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChecklistFragment extends BaseFragment implements OnRefreshListener, Callback {
+public class ChecklistFragment extends SearchableBaseFragment implements OnRefreshListener,
+        Callback {
 
     private static final String TAG = makeLogTag(ChecklistFragment.class);
 
@@ -62,6 +63,8 @@ public class ChecklistFragment extends BaseFragment implements OnRefreshListener
     public static final String ENTITY_PROPERTY_NAME_OWNER_NAME = "owner_name";
 
     public static final String ENTITY_PROPERTY_NAME_OWNER_PICTURE = "owner_picture";
+
+    public static final String ENTITY_PROPERTY_NAME_OWNER_IS_FACEBOOK = "owner_isfacebook";
 
     public static final String ENTITY_PROPERTY_NAME_TITLE = "title";
 
@@ -95,13 +98,7 @@ public class ChecklistFragment extends BaseFragment implements OnRefreshListener
 
     private Integer mLongClickedPosition;
 
-    public static final int MODE_MY_CHECKLIST = 0;
-
-    public static final int MODE_RECOMMEND_CHECKLIST = 1;
-
-    public static final int MODE_FAVORITE_CHECKLIST = 2;
-
-    private int mViewMode = MODE_MY_CHECKLIST;
+    private int mViewMode = MainActivity.MODE_MY_CHECKLIST;
 
     private String mSearchKeyword = "";
 
@@ -126,62 +123,6 @@ public class ChecklistFragment extends BaseFragment implements OnRefreshListener
         mEntityList = new ArrayList<BaasioEntity>();
 
         setHasOptionsMenu(true);
-    }
-
-    public void reloadFromArguments(Bundle arguments) {
-        mlvList.setAdapter(null);
-
-        if (!ObjectUtils.isEmpty(Baas.io().getSignedInUser())) {
-            if (arguments != null)
-                mViewMode = arguments.getInt("checklist_mode", 0);
-            else
-                mViewMode = 0;
-        } else {
-            mViewMode = MODE_RECOMMEND_CHECKLIST;
-        }
-
-        setTitle();
-
-        mListAdapter = new EntityListAdapter(getActivity());
-        mlvList.setAdapter(mListAdapter);
-
-        getEntities(QUERY_INIT);
-
-        getSherlockActivity().invalidateOptionsMenu();
-    }
-
-    private void setTitle() {
-        Intent intent = getActivity().getIntent();
-        if (intent != null) {
-            String searchKeyword = intent.getStringExtra(SearchManager.QUERY);
-
-            if (!ObjectUtils.isEmpty(searchKeyword)) {
-                mSearchKeyword = searchKeyword.trim();
-
-                getSherlockActivity().getSupportActionBar().setTitle(
-                        getResources().getString(R.string.search_title, mSearchKeyword));
-            }
-        }
-
-        if (ObjectUtils.isEmpty(mSearchKeyword)) {
-            switch (mViewMode) {
-                case MODE_MY_CHECKLIST: {
-                    getSherlockActivity().getSupportActionBar().setTitle(
-                            getString(R.string.title_activity_my_checklist));
-                    break;
-                }
-                case MODE_RECOMMEND_CHECKLIST: {
-                    getSherlockActivity().getSupportActionBar().setTitle(
-                            getString(R.string.title_activity_recomment_checklist));
-                    break;
-                }
-                case MODE_FAVORITE_CHECKLIST: {
-                    getSherlockActivity().getSupportActionBar().setTitle(
-                            getString(R.string.title_activity_favorite_checklist));
-                    break;
-                }
-            }
-        }
     }
 
     @Override
@@ -220,6 +161,63 @@ public class ChecklistFragment extends BaseFragment implements OnRefreshListener
     }
 
     @Override
+    public void reloadFromArguments(Bundle arguments) {
+        mlvList.setAdapter(null);
+
+        if (!ObjectUtils.isEmpty(Baas.io().getSignedInUser())) {
+            if (arguments != null)
+                mViewMode = arguments.getInt("checklist_mode", MainActivity.MODE_MY_CHECKLIST);
+            else
+                mViewMode = MainActivity.MODE_MY_CHECKLIST;
+        } else {
+            mViewMode = MainActivity.MODE_RECOMMEND_CHECKLIST;
+        }
+
+        setTitle();
+
+        mListAdapter = new EntityListAdapter(getActivity());
+        mlvList.setAdapter(mListAdapter);
+
+        getEntities(QUERY_INIT);
+
+        getSherlockActivity().invalidateOptionsMenu();
+    }
+
+    private void setTitle() {
+        Intent intent = getActivity().getIntent();
+        if (intent != null) {
+            String searchKeyword = intent.getStringExtra(SearchManager.QUERY);
+
+            if (!ObjectUtils.isEmpty(searchKeyword)) {
+                mSearchKeyword = searchKeyword.trim();
+
+                getSherlockActivity().getSupportActionBar().setTitle(
+                        getResources().getString(R.string.search_title, mSearchKeyword));
+            }
+        }
+
+        if (ObjectUtils.isEmpty(mSearchKeyword)) {
+            switch (mViewMode) {
+                case MainActivity.MODE_MY_CHECKLIST: {
+                    getSherlockActivity().getSupportActionBar().setTitle(
+                            getString(R.string.title_activity_my_checklist));
+                    break;
+                }
+                case MainActivity.MODE_RECOMMEND_CHECKLIST: {
+                    getSherlockActivity().getSupportActionBar().setTitle(
+                            getString(R.string.title_activity_recomment_checklist));
+                    break;
+                }
+                case MainActivity.MODE_FAVORITE_CHECKLIST: {
+                    getSherlockActivity().getSupportActionBar().setTitle(
+                            getString(R.string.title_activity_favorite_checklist));
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
@@ -228,11 +226,11 @@ public class ChecklistFragment extends BaseFragment implements OnRefreshListener
     public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu,
             com.actionbarsherlock.view.MenuInflater inflater) {
         if (ObjectUtils.isEmpty(mSearchKeyword)) {
-            if (mViewMode == MODE_MY_CHECKLIST) {
+            if (mViewMode == MainActivity.MODE_MY_CHECKLIST) {
                 inflater.inflate(R.menu.fragment_my_checklist, menu);
-            } else if (mViewMode == MODE_RECOMMEND_CHECKLIST) {
+            } else if (mViewMode == MainActivity.MODE_RECOMMEND_CHECKLIST) {
                 inflater.inflate(R.menu.fragment_recommend_checklist, menu);
-            } else if (mViewMode == MODE_FAVORITE_CHECKLIST) {
+            } else if (mViewMode == MainActivity.MODE_FAVORITE_CHECKLIST) {
                 inflater.inflate(R.menu.fragment_favorite_checklist, menu);
             }
         }
@@ -250,7 +248,10 @@ public class ChecklistFragment extends BaseFragment implements OnRefreshListener
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search:
-                getSherlockActivity().startSearch(null, false, null, false);
+                Bundle bundle = new Bundle();
+                bundle.putInt(SearchableActivity.INTENT_BUNDLE_SEARCHMODE,
+                        SearchableActivity.SEARCHMODE_CHECKLIST);
+                getSherlockActivity().startSearch(null, false, bundle, false);
                 break;
             case R.id.menu_new_checklist: {
                 Intent intent = new Intent(getActivity(), EditChecklistActivity.class);
@@ -408,18 +409,16 @@ public class ChecklistFragment extends BaseFragment implements OnRefreshListener
             mQuery.setType(ENTITY_TYPE);
 
             StringBuilder builder = new StringBuilder();
-            if (mViewMode == MODE_MY_CHECKLIST) {
-                BaasioUser user = Baas.io().getSignedInUser();
-                builder.append(ENTITY_PROPERTY_NAME_OWNER_UUID + " = " + user.getUuid().toString());
-            }
 
             if (!ObjectUtils.isEmpty(mSearchKeyword)) {
-                if (builder.length() != 0) {
-                    builder.append(" and ");
-                }
-
                 builder.append(ENTITY_PROPERTY_NAME_TAG + " contains " + "'" + mSearchKeyword
                         + "*'");
+            } else {
+                if (mViewMode == MainActivity.MODE_MY_CHECKLIST) {
+                    BaasioUser user = Baas.io().getSignedInUser();
+                    builder.append(ENTITY_PROPERTY_NAME_OWNER_UUID + " = "
+                            + user.getUuid().toString());
+                }
             }
 
             if (builder.length() != 0) {
@@ -445,88 +444,12 @@ public class ChecklistFragment extends BaseFragment implements OnRefreshListener
 
     }
 
-    public boolean processEntity(int mode, String title, String body, final int position) {
-        if (TextUtils.isEmpty(title)) {
-            return false;
-        }
-
-        // if (mode == EntityDialogFragment.CREATE_ENTITY) {
-        // BaasioEntity entity = new BaasioEntity(ENTITY_TYPE);
-        // entity.setProperty(ENTITY_PROPERTY_NAME_WRITER_USERNAME,
-        // Baas.io().getSignedInUser()
-        // .getUsername());
-        // entity.setProperty(ENTITY_PROPERTY_NAME_WRITER_PICTURE,
-        // Baas.io().getSignedInUser()
-        // .getPicture());
-        // entity.setProperty(ENTITY_PROPERTY_NAME_WRITER_UUID,
-        // Baas.io().getSignedInUser()
-        // .getUuid().toString());
-        // entity.setProperty(ENTITY_PROPERTY_NAME_TITLE, title);
-        // if (!ObjectUtils.isEmpty(body)) {
-        // entity.setProperty(ENTITY_PROPERTY_NAME_BODY, body);
-        // }
-        //
-        // entity.saveInBackground(new BaasioCallback<BaasioEntity>() {
-        //
-        // @Override
-        // public void onException(BaasioException e) {
-        // Toast.makeText(getActivity(), "saveInBackground =>" + e.toString(),
-        // Toast.LENGTH_LONG).show();
-        // }
-        //
-        // @Override
-        // public void onResponse(BaasioEntity response) {
-        // if (response != null) {
-        // mEntityList.add(0, response);
-        //
-        // mListAdapter.notifyDataSetChanged();
-        //
-        // if (mEntityList.isEmpty()) {
-        // mEmptyList.setVisibility(View.VISIBLE);
-        // } else {
-        // mEmptyList.setVisibility(View.GONE);
-        // }
-        // }
-        // }
-        // });
-        // } else if (mode == EntityDialogFragment.MODIFY_ENTITY) {
-        // BaasioEntity entity = new BaasioEntity(mEntityList.get(position));
-        // entity.setProperty(ENTITY_PROPERTY_NAME_TITLE, title);
-        // entity.setProperty(ENTITY_PROPERTY_NAME_BODY, body);
-        //
-        // entity.updateInBackground(new BaasioCallback<BaasioEntity>() {
-        //
-        // @Override
-        // public void onException(BaasioException e) {
-        // Toast.makeText(getActivity(), "updateInBackground =>" + e.toString(),
-        // Toast.LENGTH_LONG).show();
-        // }
-        //
-        // @Override
-        // public void onResponse(BaasioEntity response) {
-        // if (response != null) {
-        // mEntityList.remove(position);
-        // mEntityList.add(0, response);
-        //
-        // mListAdapter.notifyDataSetChanged();
-        //
-        // if (mEntityList.isEmpty()) {
-        // mEmptyList.setVisibility(View.VISIBLE);
-        // } else {
-        // mEmptyList.setVisibility(View.GONE);
-        // }
-        // }
-        // }
-        // });
-        // }
-
-        return false;
-    }
-
     public class EntityViewHolder {
         public ViewGroup mllRoot;
 
         public ImageView mivProfile;
+
+        public ImageView mivFacebook;
 
         public TextView mtvTitle;
 
@@ -581,6 +504,7 @@ public class ChecklistFragment extends BaseFragment implements OnRefreshListener
 
                 view.mllRoot = (ViewGroup)convertView.findViewById(R.id.llRoot);
                 view.mivProfile = (ImageView)convertView.findViewById(R.id.ivProfile);
+                view.mivFacebook = (ImageView)convertView.findViewById(R.id.ivFacebook);
                 view.mtvTitle = (TextView)convertView.findViewById(R.id.tvTitle);
                 view.mtvDescription = (TextView)convertView.findViewById(R.id.tvDescription);
                 view.mtvCreatedTime = (TextView)convertView.findViewById(R.id.tvCreatedTime);
@@ -605,6 +529,14 @@ public class ChecklistFragment extends BaseFragment implements OnRefreshListener
                     mImageLoader.displayImage(imageUrl, view.mivProfile, options);
                 } else {
                     view.mivProfile.setImageResource(R.drawable.person_image_empty);
+                }
+
+                boolean isFacebook = EtcUtils.getBooleanFromEntity(entity,
+                        ENTITY_PROPERTY_NAME_OWNER_IS_FACEBOOK, false);
+                if (isFacebook) {
+                    view.mivFacebook.setVisibility(View.VISIBLE);
+                } else {
+                    view.mivFacebook.setVisibility(View.GONE);
                 }
 
                 if (entity.getCreated() != null) {
@@ -708,11 +640,11 @@ public class ChecklistFragment extends BaseFragment implements OnRefreshListener
 
         MenuInflater inflater = mode.getMenuInflater();
         if (ObjectUtils.isEmpty(mSearchKeyword)) {
-            if (mViewMode == MODE_MY_CHECKLIST) {
+            if (mViewMode == MainActivity.MODE_MY_CHECKLIST) {
                 inflater.inflate(R.menu.contextmenu_my_checklist, menu);
-            } else if (mViewMode == MODE_RECOMMEND_CHECKLIST) {
+            } else if (mViewMode == MainActivity.MODE_RECOMMEND_CHECKLIST) {
                 inflater.inflate(R.menu.contextmenu_recommend_checklist, menu);
-            } else if (mViewMode == MODE_FAVORITE_CHECKLIST) {
+            } else if (mViewMode == MainActivity.MODE_FAVORITE_CHECKLIST) {
                 inflater.inflate(R.menu.contextmenu_favorite_checklist, menu);
             }
         } else {

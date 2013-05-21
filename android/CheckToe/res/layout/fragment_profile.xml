@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/white" >
+
+        <TextView
+            android:id="@+id/tvEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:visibility="gone" />
+
+        <io.baas.checktoe.ui.view.pulltorefresh.PullToRefreshListView
+            android:id="@+id/lvPullToRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:cacheColorHint="@android:color/transparent" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/llComment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/footdetail_reply_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:visibility="visible" >
+
+        <EditText
+            android:id="@+id/etComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/seachbar"
+            android:ellipsize="end"
+            android:gravity="left|center_vertical"
+            android:hint="@string/hint_profile_comment"
+            android:inputType="textAutoComplete"
+            android:lines="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btConfirm"
+            android:layout_width="48.00dp"
+            android:layout_height="28.00dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/detailview_write_btn"
+            android:text="@string/label_profile_write_comment"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -8,6 +8,6 @@ package com.kth.baasio;
 
 public final class R {
 	public static final class drawable {
-		public static final int ic_launcher = 0x7f0200b8;
+		public static final int ic_launcher = 0x7f0200bd;
 	}
 }

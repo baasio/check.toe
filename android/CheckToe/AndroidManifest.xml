@@ -21,7 +21,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	
     <application
         android:name="io.baas.checktoe.BaasioApplication"
         android:allowBackup="false"
@@ -64,6 +65,23 @@
                 android:value="io.baas.checktoe.ui.main.MainActivity" />
             <meta-data android:name="android.app.searchable" 
                 android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name="io.baas.checktoe.ui.main.FriendActivity"
+            android:label="@string/title_activity_friend" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="io.baas.checktoe.ui.main.MainActivity" />
+            <meta-data android:name="android.app.default_searchable"
+                   android:value="io.baas.checktoe.ui.main.SearchableActivity" />
+        </activity>
+        <activity
+            android:name="io.baas.checktoe.ui.main.ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:uiOptions="none" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="io.baas.checktoe.ui.main.MainActivity" />
         </activity>
 		<activity
             android:name="io.baas.checktoe.ui.auth.SignInActivity"
