@@ -32,6 +32,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
@@ -124,6 +125,28 @@ public class Baas {
      */
     public static Baas io() {
         return InstanceHolder.mSingleton;
+    }
+
+    /**
+     * Set read timeout and connect timeout
+     * 
+     * @param readTimeout milliseconds
+     * @param connectTimeout milliseconds
+     */
+    public static void setTimeout(int readTimeout, int connectTimeout) {
+        if (restTemplate.getRequestFactory() instanceof SimpleClientHttpRequestFactory) {
+            LogUtils.LOGD(TAG, "HttpUrlConnection is used");
+            ((SimpleClientHttpRequestFactory)restTemplate.getRequestFactory())
+                    .setConnectTimeout(connectTimeout);
+            ((SimpleClientHttpRequestFactory)restTemplate.getRequestFactory())
+                    .setReadTimeout(readTimeout);
+        } else if (restTemplate.getRequestFactory() instanceof HttpComponentsClientHttpRequestFactory) {
+            LogUtils.LOGD(TAG, "HttpClient is used");
+            ((HttpComponentsClientHttpRequestFactory)restTemplate.getRequestFactory())
+                    .setReadTimeout(readTimeout);
+            ((HttpComponentsClientHttpRequestFactory)restTemplate.getRequestFactory())
+                    .setConnectTimeout(connectTimeout);
+        }
     }
 
     /**
@@ -456,10 +479,8 @@ public class Baas {
         String[] newSegments = list.toArray(new String[list.size()]);
 
         String fileDownloadUrl;
-        if (baasioUrl.startsWith("http://")) {
-            fileDownloadUrl = baasioUrl.replace("http://", "http://blob.");
-        } else if (baasioUrl.startsWith("https://")) {
-            fileDownloadUrl = baasioUrl.replace("https://", "https://blob.");
+        if (baasioUrl.contains("api.")) {
+            fileDownloadUrl = baasioUrl.replace("api", "blob");
         } else {
             throw new IllegalArgumentException(BaasioError.ERROR_WRONG_BAASIO_URL);
         }
@@ -527,10 +548,12 @@ public class Baas {
         HttpEntity<?> requestEntity = null;
 
         if (method.equals(HttpMethod.POST) || method.equals(HttpMethod.PUT)) {
+            LogUtils.LOGV(TAG, "Client.httpRequest(): header: " + requestHeaders.toString());
             if (ObjectUtils.isEmpty(data)) {
                 requestEntity = new HttpEntity<Object>(requestHeaders);
             } else {
                 requestEntity = new HttpEntity<Object>(data, requestHeaders);
+                LogUtils.LOGV(TAG, "Client.httpRequest(): request: " + data.toString());
             }
 
         } else {

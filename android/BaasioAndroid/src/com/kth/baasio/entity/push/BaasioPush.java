@@ -19,17 +19,10 @@ import com.kth.common.utils.LogUtils;
 import org.springframework.http.HttpMethod;
 
 import android.content.Context;
-import android.os.Environment;
 import android.text.TextUtils;
-import android.util.Log;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -91,22 +84,22 @@ public class BaasioPush {
 
                 if (curTags.equals(newTags)) {
                     if (oldRegId.equals(regId)) {
-                        appendLog("BaasioPush.register() called but already registered.");
+                        LogUtils.LOGV(TAG, "BaasioPush.register() called but already registered.");
                         throw new BaasioException(BaasioError.ERROR_GCM_ALREADY_REGISTERED);
                     } else {
-                        appendLog("BaasioPush.register() called. Already registered on the GCM server. But, need to register again because regId changed.");
+                        LogUtils.LOGV(
+                                TAG,
+                                "BaasioPush.register() called. Already registered on the GCM server. But, need to register again because regId changed.");
                     }
                 } else {
-                    appendLog("BaasioPush.register() called. Already registered on the GCM server. But, need to register again because tags changed.");
-
-                    LogUtils.LOGV(TAG,
-                            "Already registered on the GCM server. But, need to register again because tags changed.");
+                    LogUtils.LOGV(
+                            TAG,
+                            "BaasioPush.register() called. Already registered on the GCM server. But, need to register again because tags changed.");
                 }
             } else {
-                appendLog("BaasioPush.register() called. Already registered on the GCM server. But, need to register again because username changed.");
-
-                LogUtils.LOGV(TAG,
-                        "Already registered on the GCM server. But, need to register again because username changed.");
+                LogUtils.LOGV(
+                        TAG,
+                        "BaasioPush.register() called. Already registered on the GCM server. But, need to register again because username changed.");
             }
         }
 
@@ -134,40 +127,42 @@ public class BaasioPush {
         long backoff = BACKOFF_MILLIS + sRandom.nextInt(1000);
 
         for (int i = 1; i <= MAX_ATTEMPTS; i++) {
-            appendLog("#" + i + " Attempt..");
+            LogUtils.LOGV(TAG, "#" + i + " Attempt..");
             try {
                 BaasioResponse response = null;
                 if (ObjectUtils.isEmpty(oldRegId)) {
-                    appendLog("POST /devices");
-                    appendLog("Request: " + device.toString());
+                    LogUtils.LOGV(TAG, "POST /devices");
+                    LogUtils.LOGV(TAG, "Request: " + device.toString());
 
                     response = Baas.io().apiRequest(HttpMethod.POST, null, device, "devices");
 
-                    appendLog("Response: " + response.toString());
+                    LogUtils.LOGV(TAG, "Response: " + response.toString());
                 } else {
                     if (!oldRegId.equals(regId)) {
-                        appendLog("RegId changed!!!!");
+                        LogUtils.LOGV(TAG, "RegId changed!!!!");
 
-                        appendLog("New RegId: " + regId);
-                        appendLog("Old RegId: " + oldRegId);
+                        LogUtils.LOGV(TAG, "New RegId: " + regId);
+                        LogUtils.LOGV(TAG, "Old RegId: " + oldRegId);
                     } else {
-                        appendLog("New and old regId are same!!!");
+                        LogUtils.LOGV(TAG, "New and old regId are same!!!");
 
-                        appendLog("RegId: " + oldRegId);
+                        LogUtils.LOGV(TAG, "RegId: " + oldRegId);
                     }
 
-                    appendLog("PUT /devices/" + oldRegId);
-                    appendLog("Request: " + device.toString());
+                    LogUtils.LOGV(TAG, "PUT /devices/" + oldRegId);
+                    LogUtils.LOGV(TAG, "Request: " + device.toString());
 
                     response = Baas.io().apiRequest(HttpMethod.PUT, null, device, "devices",
                             oldRegId);
 
-                    appendLog("Response: " + response.toString());
+                    LogUtils.LOGV(TAG, "Response: " + response.toString());
                 }
 
                 if (response != null) {
                     BaasioDevice entity = response.getFirstEntity().toType(BaasioDevice.class);
                     if (!ObjectUtils.isEmpty(entity)) {
+                        BaasioPreferences
+                                .setRegisteredSenderId(context, Baas.io().getGcmSenderId());
                         GCMRegistrar.setRegisteredOnServer(context, true);
 
                         BaasioPreferences.setRegisteredTags(context, tagString);
@@ -183,10 +178,8 @@ public class BaasioPush {
 
                     throw new BaasioException(BaasioError.ERROR_UNKNOWN_NORESULT_ENTITY);
                 }
-
-                throw new BaasioException(BaasioError.ERROR_UNKNOWN_NO_RESPONSE_DATA);
             } catch (BaasioException e) {
-                appendLog(e.toString());
+                LogUtils.LOGV(TAG, e.toString());
 
                 String statusCode = e.getStatusCode();
                 if (!ObjectUtils.isEmpty(statusCode)) {
@@ -210,16 +203,16 @@ public class BaasioPush {
                 // Here we are simplifying and retrying on any error; in a real
                 // application, it should retry only on unrecoverable errors
                 // (like HTTP error code 503).
-                Log.e(TAG, "Failed to register on attempt " + i, e);
+                LogUtils.LOGE(TAG, "Failed to register on attempt " + i, e);
                 if (i == MAX_ATTEMPTS) {
                     break;
                 }
                 try {
-                    Log.v(TAG, "Sleeping for " + backoff + " ms before retry");
+                    LogUtils.LOGV(TAG, "Sleeping for " + backoff + " ms before retry");
                     Thread.sleep(backoff);
                 } catch (InterruptedException e1) {
                     // Activity finished before we complete - exit.
-                    Log.d(TAG, "Thread interrupted: abort remaining retries!");
+                    LogUtils.LOGD(TAG, "Thread interrupted: abort remaining retries!");
                     Thread.currentThread().interrupt();
                     return null;
                 }
@@ -231,44 +224,29 @@ public class BaasioPush {
         return null;
     }
 
-    public static void appendLog(String text) {
-        if (!BuildConfig.DEBUG) {
-            return;
+    private static boolean compareArrays(String[] arr1, String[] arr2) {
+        if (ObjectUtils.isEmpty(arr1) || ObjectUtils.isEmpty(arr2)) {
+            return false;
         }
 
-        Environment.getExternalStorageDirectory();
+        Arrays.sort(arr1);
+        Arrays.sort(arr2);
+        return Arrays.equals(arr1, arr2);
+    }
 
-        Date currentDate = new Date();
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd");
-        String current = dateFormat.format(currentDate);
-
-        File logFile = new File(Environment.getExternalStorageDirectory() + "/baas_io_Push_"
-                + current + ".txt");
-        if (!logFile.exists()) {
-            try {
-                logFile.createNewFile();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+    private static boolean needRegisterSenderId(Context context, String regId) {
+        if (TextUtils.isEmpty(regId)) {
+            LogUtils.LOGD(TAG, "RegId is empty. Need register Sender ID.");
+            return true;
         }
 
-        try {
-            // BufferedWriter for performance, true to set append to file flag
-            BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
-
-            String currentDateTimeString = SimpleDateFormat.getDateTimeInstance().format(
-                    currentDate);
-            buf.append(currentDateTimeString);
-            buf.newLine();
-            buf.append(text);
-            buf.newLine();
-            buf.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        String[] oldSenderIds = BaasioPreferences.getRegisteredSenderId(context);
+        String[] newSenderIds = Baas.io().getGcmSenderId();
+        if (!compareArrays(oldSenderIds, newSenderIds)) {
+            LogUtils.LOGD(TAG, "SenderID is different. Need register Sender ID.");
+            return true;
         }
+        return false;
     }
 
     /**
@@ -282,9 +260,16 @@ public class BaasioPush {
      */
     public static BaasioDeviceAsyncTask registerInBackground(final Context context,
             final BaasioDeviceCallback callback) {
+        if (!Baas.io().isGcmEnabled()) {
+            if (callback != null) {
+                callback.onException(new BaasioException(BaasioError.ERROR_GCM_DISABLED));
+            }
+            return null;
+        }
+
         final String regId = GCMRegistrar.getRegistrationId(context);
 
-        if (TextUtils.isEmpty(regId)) {
+        if (needRegisterSenderId(context, regId)) {
             GCMRegistrar.register(context, Baas.io().getGcmSenderId());
         } else {
             BaasioDeviceAsyncTask task = new BaasioDeviceAsyncTask(callback) {
@@ -310,15 +295,22 @@ public class BaasioPush {
      * callbacks are called in the UI thread.
      * 
      * @param context Context
-     * @param tags tags
+     * @param tags Tags. The max length of each tag is 36.
      * @param callback GCM registration result callback
      * @return registration task
      */
     public static BaasioDeviceAsyncTask registerWithTagsInBackground(final Context context,
             String tags, final BaasioDeviceCallback callback) {
+        if (!Baas.io().isGcmEnabled()) {
+            if (callback != null) {
+                callback.onException(new BaasioException(BaasioError.ERROR_GCM_DISABLED));
+            }
+            return null;
+        }
+
         List<String> tagList = getTagList(tags);
         for (String tag : tagList) {
-            if (tag.length() > 12) {
+            if (tag.length() > 36) {
                 throw new IllegalArgumentException(BaasioError.ERROR_GCM_TAG_LENGTH_EXCEED);
             }
 
@@ -351,7 +343,7 @@ public class BaasioPush {
         String regId = BaasioPreferences.getRegisteredRegId(context);
 
         if (!ObjectUtils.isEmpty(regId)) {
-            appendLog("DELETE /devices/" + regId);
+            LogUtils.LOGV(TAG, "DELETE /devices/" + regId);
 
             BaasioResponse response = Baas.io().apiRequest(HttpMethod.DELETE, null, null,
                     "devices", regId);
@@ -365,7 +357,7 @@ public class BaasioPush {
             GCMRegistrar.setRegisteredOnServer(context, false);
 
             if (response != null) {
-                appendLog("Response: " + response.toString());
+                LogUtils.LOGV(TAG, "Response: " + response.toString());
                 return response;
             } else {
                 throw new BaasioException(BaasioError.ERROR_UNKNOWN_NO_RESPONSE_DATA);
