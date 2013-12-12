@@ -22,9 +22,9 @@ import static com.kth.common.utils.LogUtils.LOGW;
 import static com.kth.common.utils.LogUtils.makeLogTag;
 
 import com.google.android.gcm.GCMBaseIntentService;
+import com.kth.baasio.entity.push.BaasioPayload;
 import com.kth.baasio.entity.push.BaasioPush;
 import com.kth.baasio.exception.BaasioException;
-import com.kth.baasio.exception.BaasioRuntimeException;
 import com.kth.baasio.utils.JsonUtils;
 import com.kth.baasio.utils.ObjectUtils;
 
@@ -111,25 +111,14 @@ public class GCMIntentService extends GCMBaseIntentService {
      * Issues a notification to inform the user that server has sent a message.
      */
     private static void generateNotification(Context context, String message) {
-        String body;
-        try {
-            GcmMessage msg = JsonUtils.parse(message, GcmMessage.class);
-            if (msg == null || msg.aps == null) {
-                return;
-            }
+        BaasioPayload msg = JsonUtils.parse(message, BaasioPayload.class);
+        if (ObjectUtils.isEmpty(msg)) {
+            return;
+        }
 
-            if (!ObjectUtils.isEmpty(msg.aps.getAlert())) {
-                body = msg.aps.getAlert().replace("\\r\\n", "\n");
-            } else {
-                return;
-            }
-        } catch (BaasioRuntimeException e) {
-            if (!ObjectUtils.isEmpty(message)) {
-                body = message;
-            } else {
-                body = "Error";
-            }
-
+        String alert = "";
+        if (!ObjectUtils.isEmpty(msg.getAlert())) {
+            alert = msg.getAlert().replace("\\r\\n", "\n");
         }
 
         int icon = R.drawable.ic_stat_checktoe;
@@ -145,8 +134,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 
         Notification notification = new NotificationCompat.Builder(context).setWhen(when)
                 .setSmallIcon(icon).setContentTitle(context.getString(R.string.app_name))
-                .setContentText(body).setContentIntent(intent).setTicker(body).setAutoCancel(true)
-                .getNotification();
+                .setContentText(alert).setContentIntent(intent).setTicker(alert)
+                .setAutoCancel(true).getNotification();
 
         notificationManager.notify(0, notification);
     }
