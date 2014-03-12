@@ -438,51 +438,54 @@ public class ProfileFragment extends BaseFragment implements OnRefreshListener, 
 
                 DialogUtils.showProgressDialog(ProfileFragment.this, "following",
                         getString(R.string.progress_dialog_saving));
-                user.connectInBackground("following", mUser, new BaasioCallback<BaasioUser>() {
-
-                    @Override
-                    public void onResponse(BaasioUser response) {
-                        new Handler().post(new Runnable() {
+                user.connectInBackground("following", mUser, BaasioUser.class,
+                        new BaasioCallback<BaasioUser>() {
 
                             @Override
-                            public void run() {
-                                DialogUtils.dissmissProgressDialog(ProfileFragment.this,
-                                        "following");
+                            public void onResponse(BaasioUser response) {
+                                new Handler().post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        DialogUtils.dissmissProgressDialog(ProfileFragment.this,
+                                                "following");
+                                    }
+                                });
+
+                                if (!ObjectUtils.isEmpty(response)) {
+                                    Toast.makeText(getActivity(),
+                                            getString(R.string.success_following),
+                                            Toast.LENGTH_LONG).show();
+
+                                    mIsFollowing = Boolean.valueOf(true);
+
+                                    getSherlockActivity().invalidateOptionsMenu();
+                                } else {
+                                    Toast.makeText(
+                                            getActivity(),
+                                            getString(R.string.fail_following,
+                                                    getString(R.string.error_unknown)),
+                                            Toast.LENGTH_LONG).show();
+                                }
                             }
-                        });
-
-                        if (!ObjectUtils.isEmpty(response)) {
-                            Toast.makeText(getActivity(), getString(R.string.success_following),
-                                    Toast.LENGTH_LONG).show();
-
-                            mIsFollowing = Boolean.valueOf(true);
-
-                            getSherlockActivity().invalidateOptionsMenu();
-                        } else {
-                            Toast.makeText(
-                                    getActivity(),
-                                    getString(R.string.fail_following,
-                                            getString(R.string.error_unknown)), Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    }
-
-                    @Override
-                    public void onException(BaasioException e) {
-                        new Handler().post(new Runnable() {
 
                             @Override
-                            public void run() {
-                                DialogUtils.dissmissProgressDialog(ProfileFragment.this,
-                                        "following");
+                            public void onException(BaasioException e) {
+                                new Handler().post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        DialogUtils.dissmissProgressDialog(ProfileFragment.this,
+                                                "following");
+                                    }
+                                });
+
+                                Toast.makeText(
+                                        getActivity(),
+                                        getString(R.string.fail_following, e.getErrorDescription()),
+                                        Toast.LENGTH_LONG).show();
                             }
                         });
-
-                        Toast.makeText(getActivity(),
-                                getString(R.string.fail_following, e.getErrorDescription()),
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
                 break;
             }
             case R.id.menu_unfollow: {
@@ -490,51 +493,54 @@ public class ProfileFragment extends BaseFragment implements OnRefreshListener, 
 
                 DialogUtils.showProgressDialog(ProfileFragment.this, "unfollowing",
                         getString(R.string.progress_dialog_saving));
-                user.disconnectInBackground("following", mUser, new BaasioCallback<BaasioUser>() {
-
-                    @Override
-                    public void onResponse(BaasioUser response) {
-                        new Handler().post(new Runnable() {
+                user.disconnectInBackground("following", mUser, BaasioUser.class,
+                        new BaasioCallback<BaasioUser>() {
 
                             @Override
-                            public void run() {
-                                DialogUtils.dissmissProgressDialog(ProfileFragment.this,
-                                        "unfollowing");
+                            public void onResponse(BaasioUser response) {
+                                new Handler().post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        DialogUtils.dissmissProgressDialog(ProfileFragment.this,
+                                                "unfollowing");
+                                    }
+                                });
+
+                                if (!ObjectUtils.isEmpty(response)) {
+                                    Toast.makeText(getActivity(),
+                                            getString(R.string.success_unfollowing),
+                                            Toast.LENGTH_LONG).show();
+
+                                    mIsFollowing = Boolean.valueOf(false);
+
+                                    getSherlockActivity().invalidateOptionsMenu();
+                                } else {
+                                    Toast.makeText(
+                                            getActivity(),
+                                            getString(R.string.fail_unfollowing,
+                                                    getString(R.string.error_unknown)),
+                                            Toast.LENGTH_LONG).show();
+                                }
                             }
-                        });
-
-                        if (!ObjectUtils.isEmpty(response)) {
-                            Toast.makeText(getActivity(), getString(R.string.success_unfollowing),
-                                    Toast.LENGTH_LONG).show();
-
-                            mIsFollowing = Boolean.valueOf(false);
-
-                            getSherlockActivity().invalidateOptionsMenu();
-                        } else {
-                            Toast.makeText(
-                                    getActivity(),
-                                    getString(R.string.fail_unfollowing,
-                                            getString(R.string.error_unknown)), Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    }
-
-                    @Override
-                    public void onException(BaasioException e) {
-                        new Handler().post(new Runnable() {
 
                             @Override
-                            public void run() {
-                                DialogUtils.dissmissProgressDialog(ProfileFragment.this,
-                                        "unfollowing");
+                            public void onException(BaasioException e) {
+                                new Handler().post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        DialogUtils.dissmissProgressDialog(ProfileFragment.this,
+                                                "unfollowing");
+                                    }
+                                });
+
+                                Toast.makeText(
+                                        getActivity(),
+                                        getString(R.string.fail_unfollowing,
+                                                e.getErrorDescription()), Toast.LENGTH_LONG).show();
                             }
                         });
-
-                        Toast.makeText(getActivity(),
-                                getString(R.string.fail_unfollowing, e.getErrorDescription()),
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
                 break;
             }
         }
