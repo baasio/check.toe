@@ -1,6 +1,10 @@
 
 package io.baas.checktoe;
 
+import android.app.Application;
+import android.content.Context;
+import android.os.AsyncTask;
+
 import com.kth.baasio.Baas;
 import com.kth.baasio.callback.BaasioDeviceCallback;
 import com.kth.baasio.entity.push.BaasioDevice;
@@ -10,10 +14,6 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-
-import android.app.Application;
-import android.content.Context;
-import android.os.AsyncTask;
 
 public class BaasioApplication extends Application {
     private static final String TAG = LogUtils.makeLogTag(BaasioApplication.class);
@@ -62,7 +62,7 @@ public class BaasioApplication extends Application {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
                 .threadPriority(Thread.NORM_PRIORITY - 2).denyCacheImageMultipleSizesInMemory()
                 .discCacheFileNameGenerator(new Md5FileNameGenerator())
-                .tasksProcessingOrder(QueueProcessingType.LIFO).enableLogging() // Not
+                .tasksProcessingOrder(QueueProcessingType.LIFO).writeDebugLogs() // Not
                                                                                 // necessary
                                                                                 // in
                                                                                 // common
