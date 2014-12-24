@@ -2,11 +2,13 @@ apply plugin: 'android'
 
 repositories {
     mavenCentral()
+    maven { url "http://jzaccone.github.io/SlidingMenu-aar" }
 }
 
 dependencies {
     compile files('libs/gcm.jar')
-    compile project(':SlidingMenu_jfeinstein10')
+    //compile project(':SlidingMenu_jfeinstein10')
+    compile 'com.jeremyfeinstein.slidingmenu:library:1.3@aar'
     compile project(':BaasioAndroid')
     compile project(':BaasioHelpCenter')
     compile 'com.facebook.android:facebook-android-sdk:+'

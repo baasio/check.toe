@@ -1,4 +1,3 @@
-include ':SlidingMenu_jfeinstein10'
 include ':BaasioAndroid'
 include ':BaasioHelpCenter'
 include ':CheckToe'
